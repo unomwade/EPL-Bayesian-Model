@@ -1,0 +1,176 @@
+---
+title: "BayesianFinal6"
+output: pdf_document
+date: "2022-12-18"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(dplyr)
+#5a)
+setwd("~/Downloads")
+set.seed(1)
+epl = read.csv("epl.csv",header = T)
+z = epl %>% arrange(HomeTeam)
+names = unique(z$HomeTeam)
+
+played = matrix(0,20,20)
+for (i in 1:146) {
+  played[epl[i,2],epl[i,5]] = 1
+}
+for (i in 1:20) {
+  played[i,i] = 1
+}
+
+#b)
+home_points = matrix(0,20,20)
+away_points = matrix(0,20,20)
+for (i in 1:146) {
+  if(epl[i,3]>epl[i,6]){
+    home_points[epl[i,2],epl[i,5]] = 3
+  }
+  else if(epl[i,3]<epl[i,6]){
+    away_points[epl[i,2],epl[i,5]] = 3
+  }
+  else {
+    home_points[epl[i,2],epl[i,5]] = 1
+    away_points[epl[i,2],epl[i,5]] = 1
+  }
+  
+}
+
+
+source("Final6.R",knitr::knit_global())
+#5h)
+lPoints = cbind.data.frame(names,colMeans(sampleMatrix65[,423:442]))
+colnames(lPoints) = c("names","Points")
+lPoints = lPoints %>% arrange(Points)
+#Top 4
+lPoints[17:20,]
+#Bottom 3
+lPoints[1:3,]
+
+#i)
+lRank = cbind.data.frame(names,colMeans(sampleMatrix65[,1:20]))
+colnames(lRank) = c("names","Rank")
+lRank = lRank %>% arrange(Rank)
+#Top 4
+lRank[1:4,]
+#Bottom 3
+lRank[18:20,]
+
+#j)
+lRanks = cbind.data.frame(names,colMeans(sampleMatrix65[,21:40]))
+colnames(lRanks) = c("names","Rank1")
+lRanks = lRanks %>% arrange(Rank1)
+#Most Often
+lRanks[20,]
+
+#k
+topRanks = matrix(sampleMatrix65[,21:100],nrow = nrow(sampleMatrix65),ncol = 80)
+top4 = vector(mode = "double",length = 20)
+for(i in 1:20){
+  top4[i] = (sum(topRanks[,i]) + sum(topRanks[,i+20]) + sum(topRanks[,i+40]) + sum(topRanks[,i+60]))/nrow(topRanks)
+}
+
+top4 = cbind.data.frame(names,top4)
+top4 = top4 %>% arrange(top4)
+top4[1:4,]
+
+#l)
+botRanks = matrix(sampleMatrix65[,361:420],nrow = nrow(sampleMatrix65),ncol = 60)
+bot3 = vector(mode = "double",length = 20)
+for(i in 1:20){
+  bot3[i] = (sum(botRanks[,i]) + sum(botRanks[,i+20]) + sum(botRanks[,i+40]))/nrow(botRanks)
+}
+
+bot3 = cbind.data.frame(names,bot3)
+bot3 = bot3 %>% arrange(-bot3)
+bot3[1:3,]
+
+#m)
+uWin =0
+cWin = 0
+draw = 0
+
+for (i in 1:nrow(sampleMatrix65)) {
+  if(sampleMatrix65[i,421]==3){
+    cWin = cWin + 1
+  }
+  else if (sampleMatrix65[i,421]==0){
+    uWin = uWin + 1
+  }
+  
+  else{
+    draw = draw + 1
+  }
+}
+
+uWin/nrow(sampleMatrix65)
+cWin/nrow(sampleMatrix65)
+draw/nrow(sampleMatrix65)
+
+
+
+```
+We saw significant changes to our answers to question 5. While the very top and very bottom were more consistent, there was shuffling of the teams close to them. These results seemed a bit tighter in their grouping than with the other model.
+
+
+```{r}
+library(ggplot2)
+library(dplyr)
+
+#4b)
+aPoints = colMeans(sampleMatrix64[,1:20])
+dPoints = colMeans(sampleMatrix64[,21:40])
+z = epl %>% arrange(HomeTeam)
+names = unique(z$HomeTeam)
+df = data.frame(names,aPoints,dPoints)
+rownames(df) = 1:20
+ggplot(df,aes(x=aPoints,y=dPoints,label=names)) + geom_point() + geom_text()
+
+#c) 
+#Best O
+df[which.max(df$aPoints),]
+#Worst O
+df[which.min(df$aPoints),]
+#Best D
+df[which.max(df$dPoints),]
+#Worst D
+df[which.min(df$dPoints),]
+
+#d)
+aRank = colMeans(sampleMatrix64[,41:60])
+dRank = colMeans(sampleMatrix64[,61:80])
+dfR = data.frame(names,aRank,dRank)
+rownames(dfR) = 1:20
+
+#Best O
+dfR[which.min(dfR$aRank),]
+#Worst O
+dfR[which.max(dfR$aRank),]
+#Best D
+dfR[which.min(dfR$dRank),]
+#Worst D
+dfR[which.max(dfR$dRank),]
+
+#e-f)
+Ranks.a = sampleMatrix64[,81:480]/nrow(sampleMatrix64)
+Ranks.d = sampleMatrix64[,481:880]/nrow(sampleMatrix64)
+
+#Best O
+names[which.max(colSums(Ranks.a[,1:20]))]
+#Worst O
+names[which.max(colSums(Ranks.a[,381:400]))]
+#Best D
+names[which.max(colSums(Ranks.d[,1:20]))]
+#Worst D
+names[which.max(colSums(Ranks.d[,381:400]))]
+
+```
+The results for question 4 were almost completely unchanged.
+
+

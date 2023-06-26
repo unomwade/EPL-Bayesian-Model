@@ -1,0 +1,40 @@
+model{
+  for(i in 1:146){
+    H[i]~dpois(lambda[hTeam[i],aTeam[i]])
+    
+    A[i]~dpois(theta[hTeam[i],aTeam[i]])
+    
+  }
+  
+  for(i in 1:20){
+    for(j in 1:20){
+      lambda[i,j] = exp(mu + alpha[i] - delta[j] + gamma)
+      theta[i,j] = exp(mu + alpha[j] - delta[i])
+    }
+  }
+  
+  for(i in 1:20){
+      for(j in 1:20){
+       ranks.a[i,j] = ifelse(rank.a[i] == j,1,0)
+      }
+    }
+
+    for(i in 1:20){
+      for(j in 1:20){
+        ranks.d[i,j] = ifelse(rank.d[i] == j,1,0)
+      }
+    }
+
+  rank.a = rank(-alpha)
+  rank.d = rank(-delta)  
+ 
+  alpha[20] = -sum(alpha[1:19])
+  delta[20] = -sum(delta[1:19])
+  for(i in 1:19){
+    alpha[i]~dnorm(0,.01)
+    delta[i]~dnorm(0,.01)
+  }
+  
+  mu~dnorm(0,.01)
+  gamma~dnorm(0,.01)
+}

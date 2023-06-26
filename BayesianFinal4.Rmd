@@ -1,0 +1,67 @@
+---
+title: "Bayesian Final 4"
+output: pdf_document
+date: "2022-12-17"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(ggplot2)
+library(dplyr)
+
+#a)
+source("Final4.R",knitr::knit_global())
+
+#b)
+aPoints = colMeans(sampleMatrix[,1:20])
+dPoints = colMeans(sampleMatrix[,21:40])
+z = epl %>% arrange(HomeTeam)
+names = unique(z$HomeTeam)
+df = data.frame(names,aPoints,dPoints)
+rownames(df) = 1:20
+ggplot(df,aes(x=aPoints,y=dPoints,label=names)) + geom_point() + geom_text()
+
+#c) 
+#Best O
+df[which.max(df$aPoints),]
+#Worst O
+df[which.min(df$aPoints),]
+#Best D
+df[which.max(df$dPoints),]
+#Worst D
+df[which.min(df$dPoints),]
+
+#d)
+aRank = colMeans(sampleMatrix[,41:60])
+dRank = colMeans(sampleMatrix[,61:80])
+dfR = data.frame(names,aRank,dRank)
+rownames(dfR) = 1:20
+
+#Best O
+dfR[which.min(dfR$aRank),]
+#Worst O
+dfR[which.max(dfR$aRank),]
+#Best D
+dfR[which.min(dfR$dRank),]
+#Worst D
+dfR[which.max(dfR$dRank),]
+
+#e-f)
+Ranks.a = sampleMatrix[,81:480]/nrow(sampleMatrix)
+Ranks.d = sampleMatrix[,481:880]/nrow(sampleMatrix)
+
+#Best O
+names[which.max(colSums(Ranks.a[,1:20]))]
+#Worst O
+names[which.max(colSums(Ranks.a[,381:400]))]
+#Best D
+names[which.max(colSums(Ranks.d[,1:20]))]
+#Worst D
+names[which.max(colSums(Ranks.d[,381:400]))]
+
+```
+
