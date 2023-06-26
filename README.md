@@ -10,4 +10,4 @@ These results were used to predict the overall standings at the end of league pl
 
 epl.jags is the initial model that uses goals scored, goals allowed, league average goals, as well as the effect of each stadium's home field advantage. 
 
-The model was created in 4, while the predictions were done in various manners in 5 and 6.
+The model was created in 4, while the predictions and rankings were done in various manners in 5 and 6.
