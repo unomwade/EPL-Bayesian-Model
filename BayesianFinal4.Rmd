@@ -1,5 +1,5 @@
 ---
-title: "Bayesian Final 4"
+title: "Bayesian Final Model"
 output: pdf_document
 date: "2022-12-17"
 ---
@@ -13,10 +13,9 @@ knitr::opts_chunk$set(echo = TRUE)
 library(ggplot2)
 library(dplyr)
 
-#a)
 source("Final4.R",knitr::knit_global())
 
-#b)
+
 aPoints = colMeans(sampleMatrix[,1:20])
 dPoints = colMeans(sampleMatrix[,21:40])
 z = epl %>% arrange(HomeTeam)
@@ -25,7 +24,7 @@ df = data.frame(names,aPoints,dPoints)
 rownames(df) = 1:20
 ggplot(df,aes(x=aPoints,y=dPoints,label=names)) + geom_point() + geom_text()
 
-#c) 
+
 #Best O
 df[which.max(df$aPoints),]
 #Worst O
