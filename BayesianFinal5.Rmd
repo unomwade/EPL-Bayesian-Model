@@ -11,7 +11,6 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r}
 library(dplyr)
-#a)
 
 epl = read.csv("epl.csv",header = T)
 z = epl %>% arrange(HomeTeam)
@@ -24,7 +23,6 @@ for (i in 1:146) {
 
 for (i in 1:20) {played[i,i] = 1}
 
-#b)
 home_points = matrix(0,20,20)
 away_points = matrix(0,20,20)
 for (i in 1:146) {
@@ -41,7 +39,7 @@ for (i in 1:146) {
   
 }
 
-#c)
+
 tPoints = matrix(0,1,20)
 for (i in 1:20) {
   tPoints[i] = sum(home_points[i,])+sum(away_points[,i])
@@ -49,7 +47,7 @@ for (i in 1:20) {
 
 source("Final5.R",knitr::knit_global())
 
-#h)
+
 lPoints = cbind.data.frame(names,colMeans(sampleMatrix5[,423:442]))
 colnames(lPoints) = c("names","Points")
 lPoints = lPoints %>% arrange(Points)
@@ -58,7 +56,7 @@ lPoints[17:20,]
 #Bottom 3
 lPoints[1:3,]
 
-#i)
+
 lRank = cbind.data.frame(names,colMeans(sampleMatrix5[,1:20]))
 colnames(lRank) = c("names","Rank")
 lRank = lRank %>% arrange(Rank)
@@ -67,14 +65,14 @@ lRank[1:4,]
 #Bottom 3
 lRank[18:20,]
 
-#j)
+
 lRanks = cbind.data.frame(names,colMeans(sampleMatrix5[,21:40]))
 colnames(lRanks) = c("names","Rank1")
 lRanks = lRanks %>% arrange(Rank1)
 #Most Often
 lRanks[20,]
 
-#k
+
 topRanks = matrix(sampleMatrix5[,21:100],nrow = nrow(sampleMatrix5),ncol = 80)
 top4 = vector(mode = "double",length = 20)
 for(i in 1:20){
@@ -85,7 +83,7 @@ top4 = cbind.data.frame(names,top4)
 top4 = top4 %>% arrange(-top4)
 top4[1:4,]
 
-#l)
+
 botRanks = matrix(sampleMatrix5[,361:420],nrow = nrow(sampleMatrix5),ncol = 60)
 bot3 = vector(mode = "double",length = 20)
 for(i in 1:20){
@@ -96,7 +94,7 @@ bot3 = cbind.data.frame(names,bot3)
 bot3 = bot3 %>% arrange(-bot3)
 bot3[1:3,]
 
-#m)
+
 uWin =0
 cWin = 0
 draw = 0
